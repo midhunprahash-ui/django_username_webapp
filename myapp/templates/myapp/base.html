@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Username Matcher{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f2f5;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group input[type="file"] {
+            border: 1px solid #e2e8f0;
+            padding: 10px;
+            border-radius: 8px;
+            width: 100%;
+            background-color: #f8fafc;
+        }
+
+        .btn {
+            background-color: #4f46e5;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: #4338ca;
+        }
+
+        .message {
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .message.success {
+            background-color: #d1fae5;
+            color: #065f46;
+            border: 1px solid #10b981;
+        }
+
+        .message.error {
+            background-color: #fee2e2;
+            color: #b91c1c;
+            border: 1px solid #ef4444;
+        }
+
+        .message.info {
+            background-color: #e0f2fe;
+            color: #0369a1;
+            border: 1px solid #38bdf8;
+        }
+
+        .message.warning {
+            background-color: #fffbeb;
+            color: #b45309;
+            border: 1px solid #f59e0b;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="text-3xl font-bold text-center mb-8 text-gray-800">{% block heading %}{% endblock %}</h1>
+
+        {% if messages %}
+        <div class="mb-6">
+            {% for message in messages %}
+            <div class="message {% if message.tags %}{{ message.tags }}{% endif %} mb-3">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% block content %}{% endblock %}
+    </div>
+</body>
+
+</html>
