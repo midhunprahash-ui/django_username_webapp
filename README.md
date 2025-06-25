@@ -1,1 +1,0 @@
-# django_username_webapp
