@@ -80,11 +80,36 @@
             color: #b45309;
             border: 1px solid #f59e0b;
         }
+
+        /* Styles for login form inputs */
+        .login-form-input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-sizing: border-box;
+            /* Include padding in element's total width and height */
+        }
     </style>
 </head>
 
 <body>
     <div class="container">
+        <!-- Authentication Status and Links -->
+        <div class="flex justify-between items-center mb-6">
+            {% if user.is_authenticated %}
+            <p class="text-gray-700">Welcome, <span class="font-semibold">{{ user.username }}</span>!</p>
+            <form action="{% url 'logout' %}" method="post" class="inline-block">
+                {% csrf_token %}
+                <button type="submit" class="text-sm text-indigo-600 hover:text-indigo-800 font-medium">Logout</button>
+            </form>
+            {% else %}
+            <p class="text-gray-700">You are not logged in.</p>
+            <a href="{% url 'login' %}" class="text-sm text-indigo-600 hover:text-indigo-800 font-medium">Login</a>
+            {% endif %}
+        </div>
+
         <h1 class="text-3xl font-bold text-center mb-8 text-gray-800">{% block heading %}{% endblock %}</h1>
 
         {% if messages %}

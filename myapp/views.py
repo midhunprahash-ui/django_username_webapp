@@ -6,8 +6,9 @@ import io
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib import messages
-from .models import Employee, Department 
-from .forms import UsernameCSVUploadForm 
+from .models import Employee, Department
+from .forms import UsernameCSVUploadForm
+from django.contrib.auth.decorators import login_required
 
 
 SCORE_THRESHOLD = 50
@@ -82,7 +83,7 @@ def compute_match_score(username, employee_name, first_name, last_name, emp_id):
     )
     return min(composite, 100)
 
-
+@login_required
 def unauthorized_employees(request):
     form = UsernameCSVUploadForm()
     unauthorized_employee_list = []
@@ -94,7 +95,7 @@ def unauthorized_employees(request):
 
             if not usernames_csv.name.endswith('.csv'):
                 messages.error(request, 'Please upload a CSV file.')
-                return render(request, 'myapp/unauthorized_employees.html', { 
+                return render(request, 'myapp/unauthorized_employees.html', {
                     'form': form,
                     'unauthorized_employee_list': unauthorized_employee_list
                 })
@@ -107,7 +108,7 @@ def unauthorized_employees(request):
 
                 if 'username' not in usernames_df.columns:
                     messages.error(request, "Usernames CSV must contain a 'username' column.")
-                    return render(request, 'myapp/unauthorized_employees.html', { 
+                    return render(request, 'myapp/unauthorized_employees.html', {
                         'form': form,
                         'unauthorized_employee_list': unauthorized_employee_list
                     })
@@ -123,7 +124,7 @@ def unauthorized_employees(request):
             employees_from_db = Employee.objects.all()
             if not employees_from_db.exists():
                 messages.warning(request, "No employee data found in the database. Please ensure employee data is loaded.")
-                return render(request, 'myapp/unauthorized_employees.html', { 
+                return render(request, 'myapp/unauthorized_employees.html', {
                     'form': form,
                     'unauthorized_employee_list': unauthorized_employee_list
                 })
@@ -160,8 +161,16 @@ def unauthorized_employees(request):
             
             messages.success(request, "Authorization check completed. See results below.")
             
-    return render(request, 'myapp/unauthorized_employees.html', { 
+    return render(request, 'myapp/unauthorized_employees.html', {
         'form': form,
         'unauthorized_employee_list': unauthorized_employee_list
     })
 
+
+@login_required
+def projects(request):
+    context = {
+        'page_title': 'My Projects',
+        'message': 'This is the projects page. Content will go here!',
+    }
+    return render(request, 'myapp/projects.html', context)

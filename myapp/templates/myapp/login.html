@@ -1,0 +1,49 @@
+{% extends "myapp/base.html" %} {# Extend your base template for consistent styling #}
+
+{% block title %}Login{% endblock %}
+
+{% block heading %}Login to Your Account{% endblock %}
+
+{% block content %}
+<p class="text-center text-gray-600 mb-6">Please enter your username and password to log in.</p>
+
+<form method="post" class="space-y-6">
+    {% csrf_token %}
+    {# Display non-field errors (e.g., "Please enter a correct username and password") #}
+    {% if form.non_field_errors %}
+    <div class="message error">
+        {% for error in form.non_field_errors %}
+        <p>{{ error }}</p>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="form-group">
+        <label for="{{ form.username.id_for_label }}">Username:</label>
+        <input type="text" name="{{ form.username.html_name }}" id="{{ form.username.id_for_label }}"
+            class="login-form-input" placeholder="Enter your username" required>
+        {% if form.username.errors %}
+        <p class="text-red-500 text-xs italic">{{ form.username.errors }}</p>
+        {% endif %}
+    </div>
+
+    <div class="form-group">
+        <label for="{{ form.password.id_for_label }}">Password:</label>
+        <input type="password" name="{{ form.password.html_name }}" id="{{ form.password.id_for_label }}"
+            class="login-form-input" placeholder="Enter your password" required>
+        {% if form.password.errors %}
+        <p class="text-red-500 text-xs italic">{{ form.password.errors }}</p>
+        {% endif %}
+    </div>
+
+    <div class="flex justify-center">
+        <button type="submit"
+            class="btn hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50">Login</button>
+    </div>
+</form>
+
+<div class="text-center mt-8 text-gray-500 text-sm">
+    {# Optional: Link to password reset if you implement it later #}
+    {# <p><a href="{% url 'password_reset' %}" class="text-indigo-600 hover:underline">Forgot password?</a></p> #}
+</div>
+{% endblock %}
