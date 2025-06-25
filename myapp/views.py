@@ -6,13 +6,13 @@ import io
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib import messages
-from .models import Employee, Department # Imports remain relative, but now from 'myapp.models'
-from .forms import UsernameCSVUploadForm # Imports remain relative, but now from 'myapp.forms'
+from .models import Employee, Department 
+from .forms import UsernameCSVUploadForm 
 
-# --- Constants for Matching Logic ---
+
 SCORE_THRESHOLD = 50
 
-# --- Helper Function: compute_match_score ---
+
 def compute_match_score(username, employee_name, first_name, last_name, emp_id):
     username_lower = str(username).lower().strip()
     employee_name_lower = str(employee_name).lower().strip()
@@ -82,7 +82,7 @@ def compute_match_score(username, employee_name, first_name, last_name, emp_id):
     )
     return min(composite, 100)
 
-# --- View: unauthorized_employees ---
+
 def unauthorized_employees(request):
     form = UsernameCSVUploadForm()
     unauthorized_employee_list = []
@@ -94,7 +94,7 @@ def unauthorized_employees(request):
 
             if not usernames_csv.name.endswith('.csv'):
                 messages.error(request, 'Please upload a CSV file.')
-                return render(request, 'myapp/unauthorized_employees.html', { # Changed template path
+                return render(request, 'myapp/unauthorized_employees.html', { 
                     'form': form,
                     'unauthorized_employee_list': unauthorized_employee_list
                 })
@@ -107,7 +107,7 @@ def unauthorized_employees(request):
 
                 if 'username' not in usernames_df.columns:
                     messages.error(request, "Usernames CSV must contain a 'username' column.")
-                    return render(request, 'myapp/unauthorized_employees.html', { # Changed template path
+                    return render(request, 'myapp/unauthorized_employees.html', { 
                         'form': form,
                         'unauthorized_employee_list': unauthorized_employee_list
                     })
@@ -115,7 +115,7 @@ def unauthorized_employees(request):
                 input_usernames = usernames_df['username'].astype(str).tolist()
             except Exception as e:
                 messages.error(request, f"Error reading usernames CSV: {e}")
-                return render(request, 'myapp/unauthorized_employees.html', { # Changed template path
+                return render(request, 'myapp/unauthorized_employees.html', {
                     'form': form,
                     'unauthorized_employee_list': unauthorized_employee_list
                 })
@@ -123,7 +123,7 @@ def unauthorized_employees(request):
             employees_from_db = Employee.objects.all()
             if not employees_from_db.exists():
                 messages.warning(request, "No employee data found in the database. Please ensure employee data is loaded.")
-                return render(request, 'myapp/unauthorized_employees.html', { # Changed template path
+                return render(request, 'myapp/unauthorized_employees.html', { 
                     'form': form,
                     'unauthorized_employee_list': unauthorized_employee_list
                 })
@@ -160,7 +160,7 @@ def unauthorized_employees(request):
             
             messages.success(request, "Authorization check completed. See results below.")
             
-    return render(request, 'myapp/unauthorized_employees.html', { # Changed template path
+    return render(request, 'myapp/unauthorized_employees.html', { 
         'form': form,
         'unauthorized_employee_list': unauthorized_employee_list
     })
